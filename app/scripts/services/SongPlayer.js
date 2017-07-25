@@ -1,43 +1,58 @@
 (function() {
     function SongPlayer() {
-         var SongPlayer = {};
 
-         var currentSong = null;
+        //*** Private Attributes *** //
 
-         /**
-         * @desc Buzz object audio file
-         * @type {Object}
-         */
-         var currentBuzzObject = null;
+        var SongPlayer = {};
 
-         /**
-         * @function setSong
-         * @desc Stops currently playing song and loads new audio file as currentBuzzObject
-         * @param {Object} song
-         */
-         var setSong = function(song) {
-            if (currentBuzzObject) {
-                currentBuzzObject.stop();
-                currentSong.playing = null;
-            }
+        var currentSong = null;
 
-            currentBuzzObject = new buzz.sound(song.audioUrl, {
-                formats: ['mp3'],
-                preload: true,
-                volume: 10
-            });
+        /**
+        * @desc Buzz object audio file
+        * @type {Object}
+        */
+        var currentBuzzObject = null;
 
-            currentSong = song;
-         };
+        //*** Private Functions ***//
+
+        /**
+        * @function setSong
+        * @desc Stops currently playing song and loads new audio file as currentBuzzObject
+        * @param {Object} song
+        */
+        var setSong = function(song) {
+          if (currentBuzzObject) {
+              currentBuzzObject.stop();
+              currentSong.playing = null;
+          }
+          currentBuzzObject = new buzz.sound(song.audioUrl, {
+              formats: ['mp3'],
+              preload: true,
+              volume: 10
+          });
+
+          currentSong = song;
+        };
+
+        /**
+        *@function playSong
+        *@desc Plays a song (currentBuzzObject)
+        *@param {Object} song
+        */
+        var playSong = function(song){
+          currentBuzzObject.play();
+          song.playing = true;
+        };
+
+
 
          SongPlayer.play = function(song) {
             if (currentSong !== song) { //currently playing song is not equal to song clicked on
               setSong(song);
-              currentBuzzObject.play();
-              song.playing = true;
+              playSong(song);
             } else if (currentSong === song) {
               if (currentBuzzObject.isPaused()) {
-                  currentBuzzObject.play();
+              playSong(song);
               }
             }
           };
